@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 # Configuración de la interfaz con enfoque moderno, claro y accesible
 st.set_page_config(
@@ -107,33 +108,6 @@ st.markdown("""
     .badge-rojo { background-color: #DC3545 !important; color: #FFFFFF !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block; }
     .badge-amarillo { background-color: #FFC107 !important; color: #212529 !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block; }
     .badge-verde { background-color: #28A745 !important; color: #FFFFFF !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block; }
-    
-    /* 🟢 EL BOTÓN FLOTANTE DEL MICRÓFONO */
-    .floating-mic-container {
-        position: fixed;
-        bottom: 35px;
-        right: 35px;
-        background-color: #28A745 !important;
-        color: #FFFFFF !important;
-        border-radius: 50% !important;
-        width: 70px !important;
-        height: 70px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-size: 32px !important;
-        box-shadow: 0px 6px 16px rgba(40, 167, 69, 0.4) !important;
-        z-index: 999999 !important;
-        cursor: pointer;
-        transition: transform 0.2s ease-in-out;
-    }
-    .floating-mic-container:hover {
-        transform: scale(1.1);
-        background-color: #218838 !important;
-    }
-    
-    /* Ocultar el disparador de checkbox */
-    .hidden-trigger { display: none !important; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -143,8 +117,11 @@ st.subheader("El ayudante de tu tienda (Modo Seguro - 100% Offline)")
 st.markdown("---")
 
 # ==========================================
-# 🎙️ VENTANA EMERGENTE DE DICTADO POR VOZ
+# 🎙️ VENTANA EMERGENTE DE DICTADO POR VOZ (MEJORADA)
 # ==========================================
+if st.button("🎙️ Activar Asistente de Voz", use_container_width=True):
+    st.session_state.mostrar_modal_voz = not st.session_state.mostrar_modal_voz
+
 if st.session_state.mostrar_modal_voz:
     st.markdown("""
         <div style="background-color: #E2F0D9; padding: 20px; border-radius: 12px; border: 2px solid #28A745; margin-bottom: 25px;">
@@ -164,7 +141,7 @@ if st.session_state.mostrar_modal_voz:
         if "segundo" in cmd and any(x in cmd for x in ["anotar", "fiar", "debe", "suma"]):
             st.session_state.saldo_segundo += 5.0
             st.success("🤖 IA Local: ¡Entendido! Se sumaron $5.00 a la cuenta de Don Segundo Chimbo.")
-        elif "maría" in cmd or "maria" in cmd and any(x in cmd for x in ["anotar", "fiar", "debe", "suma"]):
+        elif ("maría" in cmd or "maria" in cmd) and any(x in cmd for x in ["anotar", "fiar", "debe", "suma"]):
             st.session_state.saldo_maria += 3.0
             st.success("🤖 IA Local: ¡Entendido! Se sumaron $3.00 a la cuenta de Doña María Elena Morocho.")
         elif "vender" in cmd or "venta" in cmd or "registrar" in cmd:
@@ -211,45 +188,4 @@ with c1:
     st.markdown("**Don Segundo Chimbo**")
     st.markdown(f"⚠️ Saldo pendiente: **${st.session_state.saldo_segundo:.2f}** (Hace 8 días)")
 with c2:
-    if st.button("📲 Avisar", key="ws_segundo", use_container_width=True):
-        st.success(f"💬 Mensaje listo para enviarse.")
-st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown('<div class="client-card">', unsafe_allow_html=True)
-c3, c4 = st.columns([2, 1])
-with c3:
-    st.markdown("**Doña María Elena Morocho**")
-    st.markdown(f"⚠️ Saldo pendiente: **${st.session_state.saldo_maria:.2f}** (Hace 3 días)")
-with c4:
-    if st.button("📲 Avisar", key="ws_maria", use_container_width=True):
-        st.success(f"💬 Mensaje listo para enviarse.")
-st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown("---")
-
-# 3. 🟢🟡🔴 FEED VISUAL TIPO SEMÁFORO
-st.header("📆 Semáforo de Caducidad Inteligente")
-for prod in st.session_state.inventario:
-    col_sem, col_txt = st.columns([1, 3])
-    with col_sem:
-        if prod['color'] == 'rojo': st.markdown(f'<span class="badge-rojo">{prod["estado"]}</span>', unsafe_allow_html=True)
-        elif prod['color'] == 'amarillo': st.markdown(f'<span class="badge-amarillo">{prod["estado"]}</span>', unsafe_allow_html=True)
-        else: st.markdown(f'<span class="badge-verde">{prod["estado"]}</span>', unsafe_allow_html=True)
-    with col_txt:
-        st.markdown(f"**{prod['producto']}**")
-
-# ==========================================
-# 🚀 INTERRUPTOR INVISIBLE (Checkbox oculto)
-# ==========================================
-st.markdown('<div class="hidden-trigger">', unsafe_allow_html=True)
-if st.checkbox("Toggle Voz", key="trigger_invisible"):
-    st.session_state.mostrar_modal_voz = not st.session_state.mostrar_modal_voz
-    st.rerun()
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Botón flotante que activa el checkbox oculto mediante JS
-st.markdown("""
-    <div class="floating-mic-container" onclick="document.querySelector('.hidden-trigger input').click()">
-        🎙️
-    </div>
-""", unsafe_allow_html=True)
+    if st.button("📲 Avisar
