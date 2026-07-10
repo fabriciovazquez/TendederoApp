@@ -29,48 +29,33 @@ if 'mostrar_modal_voz' not in st.session_state:
 # ==========================================
 st.markdown("""
     <style>
-    /* Fondo Claro Limpio y Moderno para evitar errores de herencia */
+    /* Fondo Claro Limpio y Moderno */
     .stApp {
         background-color: #F8F9FA;
         color: #212529 !important;
     }
     
-    /* Asegurar que los textos principales sean siempre oscuros y legibles */
+    /* Asegurar legibilidad */
     h1, h2, h3, h4, label, p, span {
         color: #212529 !important;
     }
     
-    /* 🛠️ DISEÑO DE BOTONES NATIVOS (Texto oscuro, bordes verdes nítidos) */
+    /* 🛠️ DISEÑO DE BOTONES NATIVOS */
     div.stButton > button {
         color: #155724 !important;
         background-color: #E2F0D9 !important;
         border: 2px solid #28A745 !important;
         border-radius: 10px !important;
         font-weight: bold !important;
-        opacity: 1 !important;
         padding: 10px 20px !important;
-        transition: all 0.2s ease;
     }
 
-    div.stButton > button:hover, div.stButton > button:focus, div.stButton > button:active {
+    div.stButton > button:hover {
         color: #FFFFFF !important;
         background-color: #28A745 !important;
-        border: 2px solid #28A745 !important;
     }
 
-    /* Inputs de Texto Limpios */
-    input {
-        background-color: #FFFFFF !important;
-        color: #212529 !important;
-        border: 2px solid #CED4DA !important;
-        border-radius: 8px !important;
-    }
-    
-    input::placeholder {
-        color: #6C757D !important;
-    }
-
-    /* Tarjetas del Menú Principal (Estilo Dashboard Moderno) */
+    /* Tarjetas del Menú Principal */
     .big-button {
         background-color: #FFFFFF;
         border: 1px solid #E0E0E0;
@@ -89,25 +74,27 @@ st.markdown("""
         margin-bottom: 5px;
     }
     
-    .button-desc {
-        font-size: 13px;
-        color: #6C757D !important;
-    }
-
-    /* Contenedores de Clientes (Tarjetas Blancas Elegantes) */
     .client-card {
         background-color: #FFFFFF;
         padding: 15px;
         border-radius: 10px;
         border: 1px solid #E0E0E0;
         margin-bottom: 10px;
-        box-shadow: 0px 2px 6px rgba(0,0,0,0.02);
     }
 
-    /* Etiquetas del Semáforo con excelente contraste */
-    .badge-rojo { background-color: #DC3545 !important; color: #FFFFFF !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block; }
-    .badge-amarillo { background-color: #FFC107 !important; color: #212529 !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block; }
-    .badge-verde { background-color: #28A745 !important; color: #FFFFFF !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block; }
+    .badge-rojo { background-color: #DC3545 !important; color: #FFFFFF !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; }
+    .badge-amarillo { background-color: #FFC107 !important; color: #212529 !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; }
+    .badge-verde { background-color: #28A745 !important; color: #FFFFFF !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; }
+    
+    /* 🟢 BOTÓN FLOTANTE */
+    .floating-mic-container {
+        position: fixed; bottom: 35px; right: 35px;
+        background-color: #28A745 !important; color: #FFFFFF !important;
+        border-radius: 50% !important; width: 70px !important; height: 70px !important;
+        display: flex !important; align-items: center !important; justify-content: center !important;
+        font-size: 32px !important; box-shadow: 0px 6px 16px rgba(40, 167, 69, 0.4) !important;
+        cursor: pointer; z-index: 999999 !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -117,75 +104,57 @@ st.subheader("El ayudante de tu tienda (Modo Seguro - 100% Offline)")
 st.markdown("---")
 
 # ==========================================
-# 🎙️ VENTANA EMERGENTE DE DICTADO POR VOZ (MEJORADA)
+# 🎙️ VENTANA EMERGENTE DE VOZ
 # ==========================================
-if st.button("🎙️ Activar Asistente de Voz", use_container_width=True):
-    st.session_state.mostrar_modal_voz = not st.session_state.mostrar_modal_voz
-
 if st.session_state.mostrar_modal_voz:
-    st.markdown("""
-        <div style="background-color: #E2F0D9; padding: 20px; border-radius: 12px; border: 2px solid #28A745; margin-bottom: 25px;">
-            <b style='color:#28A745; font-size:16px;'>🎙️ ASISTENTE DE VOZ LOCAL ACTIVADO</b><br>
-            <span style="font-size: 14px; color: #212529;">La IA está escuchando tu dictado. Escribe abajo el comando:</span>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    comando_voz = st.text_input(
-        "Dictado de voz detectado:", 
-        placeholder="Ej: 'Anotar 5 a Don Segundo' o 'Vender una leche'",
-        key="input_dictado_actual"
-    )
-    
+    st.markdown("<div style='background: #E2F0D9; padding: 20px; border-radius: 12px; border: 2px solid #28A745; margin-bottom: 25px;'><b>🎙️ ASISTENTE DE VOZ ACTIVADO</b></div>", unsafe_allow_html=True)
+    comando_voz = st.text_input("Dictado:", key="input_dictado_actual")
     if comando_voz:
         cmd = comando_voz.lower()
-        if "segundo" in cmd and any(x in cmd for x in ["anotar", "fiar", "debe", "suma"]):
-            st.session_state.saldo_segundo += 5.0
-            st.success("🤖 IA Local: ¡Entendido! Se sumaron $5.00 a la cuenta de Don Segundo Chimbo.")
-        elif ("maría" in cmd or "maria" in cmd) and any(x in cmd for x in ["anotar", "fiar", "debe", "suma"]):
-            st.session_state.saldo_maria += 3.0
-            st.success("🤖 IA Local: ¡Entendido! Se sumaron $3.00 a la cuenta de Doña María Elena Morocho.")
-        elif "vender" in cmd or "venta" in cmd or "registrar" in cmd:
-            st.session_state.total_ventas += 10.0
-            st.session_state.inventario[0]["cant"] -= 1
-            st.success("🤖 IA Local: Venta de $10.00 añadida a la caja diaria de forma automática.")
-        else:
-            st.info("🤖 IA Local: Comando analizado con éxito de forma 100% offline.")
+        if "segundo" in cmd: st.session_state.saldo_segundo += 5.0
+        elif "maría" in cmd: st.session_state.saldo_maria += 3.0
+        st.success("🤖 IA Local procesada.")
     st.markdown("---")
 
-# 📊 SECCIÓN DE ACCESOS DIRECTOS DEL MENÚ PRINCIPAL
+# 📊 ACCESOS DIRECTOS
 col1, col2 = st.columns(2)
-
 with col1:
-    st.markdown("""
-        <div class="big-button">
-            <div class="button-title">💰 Mis Ventas</div>
-            <div class="button-desc">Ver lo que has vendido hoy</div>
-        </div>
-    """, unsafe_allow_html=True)
-    st.metric(label="Caja Total Recaudada", value=f"${st.session_state.total_ventas:.2f}")
-    if st.button("Abrir Mis Ventas", key="btn_ventas", use_container_width=True):
-        st.info("Abriendo el módulo inteligente de registro diario...")
-
+    st.markdown('<div class="big-button"><div class="button-title">💰 Mis Ventas</div></div>', unsafe_allow_html=True)
+    st.metric("Caja", f"${st.session_state.total_ventas:.2f}")
+    st.button("Abrir Mis Ventas", key="btn_ventas", use_container_width=True)
 with col2:
-    st.markdown("""
-        <div class="big-button">
-            <div class="button-title">📦 Mi Inventario</div>
-            <div class="button-desc">Ver tus productos en percha</div>
-        </div>
-    """, unsafe_allow_html=True)
-    st.metric(label="Estado Crítico", value="1 Alerta")
-    if st.button("Abrir Mi Inventario", key="btn_inventario", use_container_width=True):
-        st.info("Abriendo lista predictiva de existencias...")
+    st.markdown('<div class="big-button"><div class="button-title">📦 Mi Inventario</div></div>', unsafe_allow_html=True)
+    st.metric("Alertas", "1")
+    st.button("Abrir Mi Inventario", key="btn_inventario", use_container_width=True)
 
 st.markdown("---")
 
 # 2. 🚨 MÓDULO: ALERTAS DE FIADOS
-st.header("🔴 Lo que me deben (Alertas de Cobro)")
+st.header("🔴 Lo que me deben")
 
 st.markdown('<div class="client-card">', unsafe_allow_html=True)
-c1, c2 = st.columns([2, 1])
-with c1:
-    st.markdown("**Don Segundo Chimbo**")
-    st.markdown(f"⚠️ Saldo pendiente: **${st.session_state.saldo_segundo:.2f}** (Hace 8 días)")
-with c2:
-    if st.button("📲 Avisar
+st.markdown(f"**Don Segundo Chimbo** - Saldo: **${st.session_state.saldo_segundo:.2f}**")
+if st.button("📲 Avisar", key="ws_segundo"):
+    with st.spinner("Enviando..."):
+        time.sleep(1)
+    st.toast("✅ Mensaje enviado")
+st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="client-card">', unsafe_allow_html=True)
+st.markdown(f"**Doña María Elena Morocho** - Saldo: **${st.session_state.saldo_maria:.2f}**")
+if st.button("📲 Avisar", key="ws_maria"):
+    with st.spinner("Enviando..."):
+        time.sleep(1)
+    st.toast("✅ Mensaje enviado")
+st.markdown('</div>', unsafe_allow_html=True)
+
+# 3. 🟢🟡🔴 SEMÁFORO
+st.header("📆 Semáforo de Caducidad")
+for prod in st.session_state.inventario:
+    clase = "badge-rojo" if prod['color']=='rojo' else "badge-amarillo" if prod['color']=='amarillo' else "badge-verde"
+    st.markdown(f'<span class="{clase}">{prod["estado"]}</span> **{prod["producto"]}**', unsafe_allow_html=True)
+
+# 🎙️ ACTIVADOR (Sustitución de lógica)
+if st.button("🎙️ Alternar Voz"):
+    st.session_state.mostrar_modal_voz = not st.session_state.mostrar_modal_voz
+    st.rerun()
