@@ -187,7 +187,6 @@ st.markdown("""
     }
 
 
-
     /* Contenedores de Clientes (Tarjetas Blancas Elegantes) */
 
     .client-card {
