@@ -240,3 +240,10 @@ st.caption("💡 Tip de Accesibilidad UX: El botón flotante del micrófono en l
 # ==========================================
 if st.button("click_trigger", key="trigger_invisible"):
     st.session_state.mostrar_modal_voz = not st.session_state.mostrar_modal_voz
+    st.rerun()
+
+st.markdown("""
+    <div class="floating-mic-container" onclick="document.querySelector('button[key=\\'trigger_invisible\\']').click()">
+        🎙️
+    </div>
+""", unsafe_allow_html=True)
