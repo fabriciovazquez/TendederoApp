@@ -26,141 +26,45 @@ if 'mostrar_modal_voz' not in st.session_state:
 # ==========================================
 # 🎨 NUEVO DISEÑO: INTERFAZ CLARA DE ALTO CONTRASTE
 # ==========================================
-st.markdown("""
-    <style>
+st.markdown("""<style>
     /* Fondo Claro Limpio y Moderno para evitar errores de herencia */
-    .stApp {
-        background-color: #F8F9FA;
-        color: #212529 !important;
-    }
-    
+    .stApp { background-color: #F8F9FA; color: #212529 !important; }
     /* Asegurar que los textos principales sean siempre oscuros y legibles */
-    h1, h2, h3, h4, label, p, span {
-        color: #212529 !important;
-    }
-    
-    /* 🛠️ DISEÑO DE BOTONES NATIVOS (Texto oscuro, bordes verdes nítidos) */
-    div.stButton > button {
-        color: #155724 !important;
-        background-color: #E2F0D9 !important;
-        border: 2px solid #28A745 !important;
-        border-radius: 10px !important;
-        font-weight: bold !important;
-        opacity: 1 !important;
-        padding: 10px 20px !important;
-        transition: all 0.2s ease;
-    }
-
-    div.stButton > button:hover, div.stButton > button:focus, div.stButton > button:active {
-        color: #FFFFFF !important;
-        background-color: #28A745 !important;
-        border: 2px solid #28A745 !important;
-    }
-
+    h1, h2, h3, h4, label, p, span { color: #212529 !important; }
+    /* 🛠️ DISEÑO DE BOTONES NATIVOS */
+    div.stButton > button { color: #155724 !important; background-color: #E2F0D9 !important; border: 2px solid #28A745 !important; border-radius: 10px !important; font-weight: bold !important; opacity: 1 !important; padding: 10px 20px !important; transition: all 0.2s ease; }
+    div.stButton > button:hover, div.stButton > button:focus, div.stButton > button:active { color: #FFFFFF !important; background-color: #28A745 !important; border: 2px solid #28A745 !important; }
     /* Inputs de Texto Limpios */
-    input {
-        background-color: #FFFFFF !important;
-        color: #212529 !important;
-        border: 2px solid #CED4DA !important;
-        border-radius: 8px !important;
-    }
-    
-    input::placeholder {
-        color: #6C757D !important;
-    }
-
-    /* Tarjetas del Menú Principal (Estilo Dashboard Moderno) */
-    .big-button {
-        background-color: #FFFFFF;
-        border: 1px solid #E0E0E0;
-        border-left: 6px solid #28A745;
-        border-radius: 12px;
-        padding: 22px;
-        text-align: center;
-        margin-bottom: 15px;
-        box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
-    }
-    
-    .button-title {
-        font-size: 22px;
-        font-weight: bold;
-        color: #28A745 !important;
-        margin-bottom: 5px;
-    }
-    
-    .button-desc {
-        font-size: 13px;
-        color: #6C757D !important;
-    }
-
-    /* Contenedores de Clientes (Tarjetas Blancas Elegantes) */
-    .client-card {
-        background-color: #FFFFFF;
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #E0E0E0;
-        margin-bottom: 10px;
-        box-shadow: 0px 2px 6px rgba(0,0,0,0.02);
-    }
-
-    /* Etiquetas del Semáforo con excelente contraste */
+    input { background-color: #FFFFFF !important; color: #212529 !important; border: 2px solid #CED4DA !important; border-radius: 8px !important; }
+    input::placeholder { color: #6C757D !important; }
+    /* Tarjetas del Menú Principal */
+    .big-button { background-color: #FFFFFF; border: 1px solid #E0E0E0; border-left: 6px solid #28A745; border-radius: 12px; padding: 22px; text-align: center; margin-bottom: 15px; box-shadow: 0px 4px 12px rgba(0,0,0,0.05); }
+    .button-title { font-size: 22px; font-weight: bold; color: #28A745 !important; margin-bottom: 5px; }
+    .button-desc { font-size: 13px; color: #6C757D !important; }
+    /* Contenedores de Clientes */
+    .client-card { background-color: #FFFFFF; padding: 15px; border-radius: 10px; border: 1px solid #E0E0E0; margin-bottom: 10px; box-shadow: 0px 2px 6px rgba(0,0,0,0.02); }
+    /* Etiquetas del Semáforo */
     .badge-rojo { background-color: #DC3545 !important; color: #FFFFFF !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block; }
     .badge-amarillo { background-color: #FFC107 !important; color: #212529 !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block; }
     .badge-verde { background-color: #28A745 !important; color: #FFFFFF !important; padding: 6px 14px; border-radius: 20px; font-weight: bold; display: inline-block; }
-    
-    /* 🟢 EL BOTÓN FLOTANTE DEL MICRÓFONO */
-    .floating-mic-container {
-        position: fixed;
-        bottom: 35px;
-        right: 35px;
-        background-color: #28A745 !important;
-        color: #FFFFFF !important;
-        border-radius: 50% !important;
-        width: 70px !important;
-        height: 70px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-size: 32px !important;
-        box-shadow: 0px 6px 16px rgba(40, 167, 69, 0.4) !important;
-        z-index: 999999 !important;
-        cursor: pointer;
-        transition: transform 0.2s ease-in-out;
-    }
-    .floating-mic-container:hover {
-        transform: scale(1.1);
-        background-color: #218838 !important;
-    }
-    
-    /* Ocultar el disparador de backend */
-    div.element-container:has(button[key="trigger_invisible"]) {
-        display: none !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
+    /* 🟢 BOTÓN FLOTANTE */
+    .floating-mic-container { position: fixed; bottom: 35px; right: 35px; background-color: #28A745 !important; color: #FFFFFF !important; border-radius: 50% !important; width: 70px !important; height: 70px !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 32px !important; box-shadow: 0px 6px 16px rgba(40, 167, 69, 0.4) !important; z-index: 999999 !important; cursor: pointer; transition: transform 0.2s ease-in-out; }
+    .floating-mic-container:hover { transform: scale(1.1); background-color: #218838 !important; }
+    div.element-container:has(button[key="trigger_invisible"]) { display: none !important; }
+</style>""", unsafe_allow_html=True)
 
 # 🏪 ENCABEZADO
 st.title("🏪 TenderoApp")
 st.subheader("El ayudante de tu tienda (Modo Seguro - 100% Offline)")
 st.markdown("---")
 
-# ==========================================
-# 🎙️ VENTANA EMERGENTE DE DICTADO POR VOZ
-# ==========================================
+# 🎙️ VENTANA EMERGENTE
 if st.session_state.mostrar_modal_voz:
-    st.markdown("""
-        <div style="background-color: #E2F0D9; padding: 20px; border-radius: 12px; border: 2px solid #28A745; margin-bottom: 25px;">
-            <b style='color:#28A745; font-size:16px;'>🎙️ ASISTENTE DE VOZ LOCAL ACTIVADO</b><br>
-            <span style="font-size: 14px; color: #212529;">La IA está escuchando tu dictado. Escribe abajo el comando:</span>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    comando_voz = st.text_input(
-        "Dictado de voz detectado:", 
-        placeholder="Ej: 'Anotar 5 a Don Segundo' o 'Vender una leche'",
-        key="input_dictado_actual"
-    )
-    
+    st.markdown("""<div style="background-color: #E2F0D9; padding: 20px; border-radius: 12px; border: 2px solid #28A745; margin-bottom: 25px;">
+        <b style='color:#28A745; font-size:16px;'>🎙️ ASISTENTE DE VOZ LOCAL ACTIVADO</b><br>
+        <span style="font-size: 14px; color: #212529;">La IA está escuchando tu dictado. Escribe abajo el comando:</span>
+    </div>""", unsafe_allow_html=True)
+    comando_voz = st.text_input("Dictado de voz detectado:", placeholder="Ej: 'Anotar 5 a Don Segundo'", key="input_dictado_actual")
     if comando_voz:
         cmd = comando_voz.lower()
         if "segundo" in cmd and any(x in cmd for x in ["anotar", "fiar", "debe", "suma"]):
@@ -177,33 +81,22 @@ if st.session_state.mostrar_modal_voz:
             st.info("🤖 IA Local: Comando analizado con éxito de forma 100% offline.")
     st.markdown("---")
 
-# 📊 SECCIÓN DE ACCESOS DIRECTOS DEL MENÚ PRINCIPAL
+# 📊 SECCIÓN DE ACCESOS DIRECTOS
 col1, col2 = st.columns(2)
-
 with col1:
-    st.markdown("""<div class="big-button">
-            <div class="button-title">💰 Mis Ventas</div>
-            <div class="button-desc">Ver lo que has vendido hoy</div>
-        </div>""", unsafe_allow_html=True)
+    st.markdown('<div class="big-button"><div class="button-title">💰 Mis Ventas</div><div class="button-desc">Ver lo que has vendido hoy</div></div>', unsafe_allow_html=True)
     st.metric(label="Caja Total Recaudada", value=f"${st.session_state.total_ventas:.2f}")
     if st.button("Abrir Mis Ventas", key="btn_ventas", use_container_width=True):
         st.info("Abriendo el módulo inteligente de registro diario...")
-
 with col2:
-    st.markdown("""<div class="big-button">
-            <div class="button-title">📦 Mi Inventario</div>
-            <div class="button-desc">Ver tus productos en percha</div>
-        </div>""", unsafe_allow_html=True)
+    st.markdown('<div class="big-button"><div class="button-title">📦 Mi Inventario</div><div class="button-desc">Ver tus productos en percha</div></div>', unsafe_allow_html=True)
     st.metric(label="Estado Crítico", value="1 Alerta")
     if st.button("Abrir Mi Inventario", key="btn_inventario", use_container_width=True):
         st.info("Abriendo lista predictiva de existencias...")
-
 st.markdown("---")
 
-# 2. 🚨 MÓDULO: ALERTAS DE FIADOS ("Lo que me deben")
+# 2. 🚨 MÓDULO: ALERTAS DE FIADOS
 st.header("🔴 Lo que me deben (Alertas de Cobro)")
-
-# Tarjeta de Cliente 1
 st.markdown('<div class="client-card">', unsafe_allow_html=True)
 c1, c2 = st.columns([2, 1])
 with c1:
@@ -211,10 +104,9 @@ with c1:
     st.markdown(f"⚠️ Saldo pendiente: **${st.session_state.saldo_segundo:.2f}** (Hace 8 días)")
 with c2:
     if st.button("📲 Avisar", key="ws_segundo", use_container_width=True):
-        st.success(f"💬 Mensaje listo para enviarse al WhatsApp de Don Segundo por un valor de ${st.session_state.saldo_segundo:.2f}.")
+        st.success(f"💬 Mensaje listo para enviarse.")
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Tarjeta de Cliente 2
 st.markdown('<div class="client-card">', unsafe_allow_html=True)
 c3, c4 = st.columns([2, 1])
 with c3:
@@ -222,38 +114,29 @@ with c3:
     st.markdown(f"⚠️ Saldo pendiente: **${st.session_state.saldo_maria:.2f}** (Hace 3 días)")
 with c4:
     if st.button("📲 Avisar", key="ws_maria", use_container_width=True):
-        st.success(f"💬 Mensaje listo para enviarse al WhatsApp de Doña María por un valor de ${st.session_state.saldo_maria:.2f}.")
+        st.success(f"💬 Mensaje listo para enviarse.")
 st.markdown('</div>', unsafe_allow_html=True)
-
 st.markdown("---")
 
-# 3. 🟢🟡🔴 FEED VISUAL TIPO SEMÁFORO
+# 3. 🟢🟡🔴 SEMÁFORO
 st.header("📆 Semáforo de Caducidad Inteligente")
-
 for prod in st.session_state.inventario:
     col_sem, col_txt = st.columns([1, 3])
     with col_sem:
-        if prod['color'] == 'rojo':
-            st.markdown(f'<span class="badge-rojo">{prod["estado"]}</span>', unsafe_allow_html=True)
-        elif prod['color'] == 'amarillo':
-            st.markdown(f'<span class="badge-amarillo">{prod["estado"]}</span>', unsafe_allow_html=True)
-        else:
-            st.markdown(f'<span class="badge-verde">{prod["estado"]}</span>', unsafe_allow_html=True)
+        if prod['color'] == 'rojo': st.markdown(f'<span class="badge-rojo">{prod["estado"]}</span>', unsafe_allow_html=True)
+        elif prod['color'] == 'amarillo': st.markdown(f'<span class="badge-amarillo">{prod["estado"]}</span>', unsafe_allow_html=True)
+        else: st.markdown(f'<span class="badge-verde">{prod["estado"]}</span>', unsafe_allow_html=True)
     with col_txt:
         st.markdown(f"**{prod['producto']}**")
 
 st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.caption("💡 Tip de Accesibilidad UX: El botón flotante del micrófono en la esquina inferior derecha activa el reconocimiento de voz.")
+st.caption("💡 Tip de Accesibilidad UX: El botón flotante activa el reconocimiento de voz local.")
 
 # ==========================================
-# 🚀 INTERRUPTOR INVISIBLE Y ELEMENTO FLOTANTE FIJO
+# 🚀 INTERRUPTOR Y BOTÓN FLOTANTE
 # ==========================================
 if st.button("click_trigger", key="trigger_invisible"):
     st.session_state.mostrar_modal_voz = not st.session_state.mostrar_modal_voz
     st.rerun()
 
-st.markdown("""
-    <div class="floating-mic-container" onclick="document.querySelector('button[key=\\'trigger_invisible\\']').click()">
-        🎙️
-    </div>
-""", unsafe_allow_html=True)
+st.markdown("""<div class="floating-mic-container" onclick="document.querySelector('button[key=\\'trigger_invisible\\']').click()">🎙️</div>""", unsafe_allow_html=True)
