@@ -132,8 +132,8 @@ st.markdown("""
         background-color: #218838 !important;
     }
     
-    /* Ocultar el disparador de backend */
-    div.element-container:has(button[key="trigger_invisible"]) {
+    /* Ocultar el disparador de backend completamente */
+    .hidden-trigger {
         display: none !important;
     }
     </style>
@@ -238,12 +238,16 @@ st.caption("💡 Tip de Accesibilidad UX: El botón flotante del micrófono en l
 # ==========================================
 # 🚀 INTERRUPTOR INVISIBLE Y ELEMENTO FLOTANTE FIJO
 # ==========================================
-if st.button("click_trigger", key="trigger_invisible"):
+# Envolvemos el botón en una clase para ocultarlo completamente en CSS
+st.markdown('<div class="hidden-trigger">', unsafe_allow_html=True)
+if st.button("🎙️", key="trigger_invisible"):
     st.session_state.mostrar_modal_voz = not st.session_state.mostrar_modal_voz
     st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
+# Actualizamos el script de click para buscar el botón dentro de la clase oculta
 st.markdown("""
-    <div class="floating-mic-container" onclick="document.querySelector('button[key=\\'trigger_invisible\\']').click()">
+    <div class="floating-mic-container" onclick="document.querySelector('.hidden-trigger button').click()">
         🎙️
     </div>
 """, unsafe_allow_html=True)
