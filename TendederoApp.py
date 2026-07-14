@@ -233,7 +233,7 @@ for prod in st.session_state.inventario:
         st.markdown(f"**{prod['producto']}**")
 
 st.markdown("<br><br><br>", unsafe_allow_html=True)
-st.caption("💡 Tip de Accesibilidad UX: El botón flotante del micrófono en la esquina inferior derecha activa el reconocimiento de voz local por NLP sin necesidad de usar datos o conexión a internet.")
+st.caption("El botón del micrófono activa el reconocimiento de voz local por NLP sin necesidad de usar datos o conexión a internet.")
 
 # ==========================================
 # 🚀 INTERRUPTOR INVISIBLE Y ELEMENTO FLOTANTE FIJO
